@@ -25,6 +25,19 @@ jobs:
         cluster-name: aks-shahin
         resource-group: rg-devops-shahin
 
+    - name: Get secret from Key Vault
+      id: getsecret
+      uses: azure/get-keyvault-secrets@v1
+      with:
+        keyvault: aks-shahin-kv
+        secrets: 'nginx-password'
+
+    - name: Create K8s Secret
+      run: |
+        kubectl create secret generic nginx-secret \
+          --from-literal=password=${{ steps.getsecret.outputs.nginx-password }} \
+          --dry-run=client -o yaml | kubectl apply -f -
+
     - name: Deploy to AKS
       run: |
         kubectl apply -f k8s/

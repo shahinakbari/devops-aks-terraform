@@ -20,3 +20,8 @@ variable "vm_size" {
   type    = string
   default = "Standard_B2s"
 }
+
+variable "enable_keyvault" {
+  type    = bool
+  default = true
+}

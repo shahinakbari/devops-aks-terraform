@@ -23,3 +23,21 @@ resource "azurerm_kubernetes_cluster" "this" {
     environment = "dev"
   }
 }
+
+resource "azurerm_key_vault" "this" {
+  name                        = "${var.aks_name}-kv"
+  location                    = var.location
+  resource_group_name         = azurerm_resource_group.this.name
+  tenant_id                   = data.azurerm_client_config.current.tenant_id
+  sku_name                    = "standard"
+}
+
+resource "azurerm_key_vault_secret" "example" {
+  name         = "nginx-password"
+  value        = "SuperSecret123!"
+  key_vault_id = azurerm_key_vault.this.id
+}
+
+
+data "azurerm_client_config" "current" {}
+
