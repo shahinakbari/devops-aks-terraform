@@ -1,41 +1,85 @@
-# Terraform AKS DevOps Project
+# 🚀 Terraform AKS DevOps Project
 
-This is a real-world DevOps project using **Terraform**, **Azure AKS**, and **Kubernetes**.
-
-## 🔧 Tools Used
-- Terraform
-- Azure CLI
-- Azure Kubernetes Service (AKS)
-- Kubernetes (kubectl)
-- GitHub
-
-## 📦 Project Structure
-terraform-aks-devops/ ├── main.tf ├── variables.tf ├── outputs.tf ├── terraform.tfvars ├── provider.tf ├── modules/ │ └── aks/ ├── k8s/ │ ├── deployment.yaml │ └── service.yaml └── README.md
-
-
-## ✅ What This Project Does
-- Creates Azure Resource Group and AKS cluster with Terraform
-- Deploys a simple Nginx app to AKS
-- Exposes it with a LoadBalancer
-
-## 🚀 How to Run
-1. `terraform init`
-2. `terraform apply -var-file="terraform.tfvars"`
-3. `az aks get-credentials`
-4. `kubectl apply -f k8s/`
-5. Access Nginx via public IP
+This is a real-world DevOps project that provisions an **Azure Kubernetes Service (AKS)** cluster using **Terraform**, deploys a sample **Nginx app** using **Kubernetes**, and securely manages secrets with **Azure Key Vault** and **GitHub Actions**.
 
 ---
 
-### 🧠 Optional (Enhancements)
-- Add GitHub Actions for CI/CD
-- Add Azure Monitor or Prometheus for monitoring
-- Use Key Vault for secrets
+## 🛠️ Tools & Technologies Used
+
+- **Terraform** – Infrastructure as Code (IaC)
+- **Microsoft Azure** – Cloud provider
+- **AKS (Azure Kubernetes Service)** – Managed Kubernetes
+- **Azure Key Vault** – Secret management
+- **GitHub Actions** – CI/CD automation
+- **Kubernetes** – Container orchestration
+- **kubectl** – CLI for Kubernetes
 
 ---
 
-## ☁️ Screenshot
-![AKS Dashboard](https://via.placeholder.com/800x400?text=Add+your+own+screenshot+here)
+## 🧱 Architecture Overview
+
+GitHub Actions → Terraform → Azure Resources (AKS + Key Vault) ↘ kubectl → Deploy Nginx + Inject Secrets
+
+
+- **AKS Cluster** is provisioned via Terraform
+- **Azure Key Vault** stores app secrets securely
+- **GitHub Actions** pulls secrets from Key Vault and deploys them as Kubernetes secrets
+- **Nginx** container uses the secret via environment variable
 
 ---
-Created with ❤️ by Shahin Akbari
+
+## 📂 Project Structure
+
+terraform-aks-devops/ ├── main.tf ├── provider.tf ├── variables.tf ├── outputs.tf ├── terraform.tfvars ├── modules/ │ └── aks/ │ ├── main.tf │ ├── variables.tf │ └── outputs.tf ├── k8s/ │ ├── deployment.yaml │ └── service.yaml ├── .github/ │ └── workflows/ │ └── deploy.yaml └── README.md
+
+
+---
+
+## ✅ Features
+
+- Full infrastructure provisioning with Terraform
+- Secure secret storage with Azure Key Vault
+- CI/CD with GitHub Actions:
+  - Login to Azure
+  - Set AKS context
+  - Pull secret from Key Vault
+  - Create K8s secret
+  - Deploy Nginx app
+
+---
+
+## 🔐 Security
+
+- No hardcoded credentials or secrets in the repo
+- Secrets stored in **Azure Key Vault**
+- GitHub Actions uses **Service Principal** with minimal required permissions
+- Kubernetes secrets created dynamically in the pipeline
+
+---
+
+## 🚀 How to Use
+
+```bash
+terraform init
+terraform apply -var-file="terraform.tfvars"
+az aks get-credentials --resource-group <your-rg> --name <your-aks>
+kubectl apply -f k8s/
+
+
+Note: Secrets are auto-managed by GitHub Actions. Just push to master and the app gets deployed with injected secrets.
+
+✨ Future Enhancements
+ Add Helm support
+
+ Integrate Prometheus + Grafana monitoring
+
+ Multi-environment setup (dev/stage/prod)
+
+ GitOps with ArgoCD or Flux
+
+🙌 Author
+Shahin Akbari
+akbarishahin@gmail.com
+📧 LinkedIn: https://www.linkedin.com/in/shahinakbari/
+📦 GitHub Repo: https://github.com/shahinakbari/devops-aks-terraform
+
