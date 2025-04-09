@@ -1,0 +1,30 @@
+name: Deploy to AKS
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Azure Login
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+    - name: Set AKS context
+      uses: azure/aks-set-context@v3
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+        cluster-name: aks-shahin
+        resource-group: rg-devops-shahin
+
+    - name: Deploy to AKS
+      run: |
+        kubectl apply -f k8s/
